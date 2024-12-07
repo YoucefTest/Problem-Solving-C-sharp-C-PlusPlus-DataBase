@@ -4,6 +4,7 @@ using System.IO;
 
 class Program
 {
+   
     const string ClientsFileName = @"C:\Users\Belhassous990\Documents\New folder\data.txt";
 
     // Define the structure of a client
@@ -64,6 +65,7 @@ class Program
     }
 
     // Load clients data from a file
+    
     public static List<sClient> LoadClientsDataFromFile(string FileName)
     {
         List<sClient> vClients = new List<sClient>();
@@ -173,7 +175,7 @@ class Program
             {
                 MarkClientForDeleteByAccountNumber(AccountNumber, ref vClients);
                 SaveClientsDataToFile(ClientsFileName, vClients);
-                vClients = LoadClientsDataFromFile(ClientsFileName); // Reload data after deletion
+               // vClients = LoadClientsDataFromFile(ClientsFileName); // Reload data after deletion
                 Console.WriteLine("\nClient deleted successfully.");
                 return true;
             }
@@ -199,10 +201,11 @@ class Program
         string AccountNumber = ReadClientAccountNumber();
         List<sClient> vClients = LoadClientsDataFromFile(ClientsFileName);
 
-
+     
 
         DeleteClientByAccountNumber(AccountNumber, ref vClients);
 
         Console.ReadKey();
+
     }
 }
