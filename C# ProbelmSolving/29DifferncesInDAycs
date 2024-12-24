@@ -1,0 +1,105 @@
+﻿using System;
+
+
+struct sDate
+{
+    public short Year;
+    public short Month;
+    public short Day;
+}
+class Program
+{
+    public static bool IsLeapYear(int Year)
+    {
+        return (Year % 4 == 0 && Year % 100 != 0) || (Year % 400 == 0);
+
+    }
+    public static int GetHowManyDaysInMonth(int Month, int Year)
+    {
+        int[] daysInMonth = { 31, 28, 31, 30, 31, 30,
+                              31, 31, 30, 31, 30, 31 };
+
+        return (Month == 2) ? (IsLeapYear(Year) ? 29 : 28) : daysInMonth[Month - 1];
+    }
+
+    public static short ReadDay()
+    {
+        Console.Write("\nPlease enter a Day: ");
+        return Convert.ToInt16(Console.ReadLine());
+    }
+
+    public static short ReadMonth()
+    {
+        Console.Write("\nPlease enter a Month: ");
+        return Convert.ToInt16(Console.ReadLine());
+    }
+
+    public static short ReadYear()
+    {
+        Console.Write("\nPlease enter a Year: ");
+        return Convert.ToInt16(Console.ReadLine());
+    }
+
+    public static sDate ReadFullDate()
+    {
+        sDate Date;
+        Date.Day = ReadDay();
+        Date.Month = ReadMonth();
+        Date.Year = ReadYear();
+        return Date;
+    }
+
+
+    public static sDate AddOneDay(sDate Date)
+    {
+        if (Date.Day == 31)
+        {
+            if (Date.Month == 12)
+            {
+                Date.Year++;
+                Date.Month = 1;
+                Date.Day = 1;
+            }
+            else
+            {
+                Date.Month++;
+                Date.Day = 1;
+            }
+        }
+        else
+        {
+            Date.Day++;
+        }
+        return Date;
+    }
+    public static int NumOfDaysFromTheBeginningOfYear(sDate date)
+    {
+        int Total = 0;
+        int remaining;
+        while (true)
+        {
+            for (int i = 1; i < date.Month; i++)
+            {
+                Total += GetHowManyDaysInMonth(i, date.Year);
+            }
+            Total += date.Day;
+            return Total;
+        }
+    }
+    public static int DifferenceInDays(sDate Date1, sDate Date2)
+    {
+        //if(Date1LessThanDate@)
+        int Total1 = NumOfDaysFromTheBeginningOfYear(Date1);
+        int Total2 = NumOfDaysFromTheBeginningOfYear(Date2);
+        return Total2 - Total1;
+    }
+
+    static void Main(string[] args)
+    {
+        sDate Date1 = ReadFullDate();
+        sDate Date2 = ReadFullDate();
+        Console.WriteLine(DifferenceInDays(Date1, Date2));
+
+        Console.ReadKey();
+    }
+}

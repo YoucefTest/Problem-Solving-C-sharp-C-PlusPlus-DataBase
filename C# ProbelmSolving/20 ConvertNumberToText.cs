@@ -1,71 +1,75 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using static System.Net.WebRequestMethods;
-using System.Security.Policy;
-using System.Threading;
-
+using System.Net;
 
 class Program
 {
-    static string[] ones = { "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
-    static string[] tens = { "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
-    static string[] thousands = { "", "Thousand", "Million", "Billion" };
-
-    static string NumberToText(int number)
+    public static int GetNumberFromUser()
     {
-        if (number == 0)
-            return "Zero";
-
-        string result = "";
-
-        int thousandIndex = 0;
-        while (number > 0)
-        {
-            if (number % 1000 != 0)
-            {
-                result = ConvertHundreds(number % 1000) + thousands[thousandIndex] + " " + result;
-            }
-            number /= 1000;
-            thousandIndex++;
-        }
-
-        return result.Trim();
-    }
-
-    static string ConvertHundreds(int number)
-    {
-        string result = "";
-
-        if (number >= 100)
-        {
-            result += ones[number / 100] + " Hundred ";
-            number %= 100;
-        }
-
-        if (number >= 20)
-        {
-            result += tens[number / 10] + " ";
-            number %= 10;
-        }
-
-        if (number > 0)
-        {
-            result += ones[number] + " ";
-        }
-
-        return result;
-    }
-
-    static void Main()
-    {
-        Console.Write("Enter a number: ");
         int number = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine("Number in text: " + NumberToText(number));
+        return number;
+    }
+
+    enum Ones { zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen }
+    enum Tens { zero, ten, twenty, thirty, forty, fifty, sixty, seventy, eighty, ninety }
+    static string[] OnesWords = { "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
+
+    static string[] TensWords = { "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
+
+    static string[] ThousandsWords = { "", "Thousand", "Million", "Billion" };
+
+    public static string ConvertNumberToWords(int num)
+    {
+
+
+
+
+
+        // Base case for numbers 1-19
+        if (num >= 1 && num <= 19)
+        {
+            return OnesWords[num];
+        }
+        // Case for numbers 20-99
+        else if (num >= 20 && num <= 99)
+        {
+            return TensWords[num / 10] + " " + OnesWords[num % 10];
+        }
+        // Case for numbers 100-999
+        else if (num >= 100 && num <= 999)
+        {
+            return OnesWords[num / 100] + " hundred " + ConvertNumberToWords(num % 100);
+        }
+        // Case for numbers 1000-999999 (Thousand)
+        else if (num >= 1000 && num <= 999999)
+        {
+            return ConvertNumberToWords(num / 1000) + " thousand " + ConvertNumberToWords(num % 1000);
+        }
+        // Case for numbers 1 million to less than 1 billion
+        else if (num >= 1000000 && num < 1000000000)
+        {
+            return ConvertNumberToWords(num / 1000000) + " million " + ConvertNumberToWords(num % 1000000);
+        }
+        // Case for numbers 1 billion and higher
+        else if (num >= 1000000000)
+        {
+            return ConvertNumberToWords(num / 1000000000) + " billion " + ConvertNumberToWords(num % 1000000000);
+        }
+
+        return "";
+    }
+
+    static void Main(string[] args)
+    {
+        int n = GetNumberFromUser();
+        string result = ConvertNumberToWords(n);
+
+        // If the number is zero, print "Zero"
+        if (string.IsNullOrEmpty(result))
+        {
+            result = "Zero";
+        }
+
+        Console.WriteLine(result);
         Console.ReadKey();
     }
 }
-
